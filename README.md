@@ -2,7 +2,7 @@
 
 This is a library that aims to provide simple wrappers around a few compression algorithms, currently just [LZO](https://www.oberhumer.com/opensource/lzo/)
 
-I use code from other sources in this repo, refer to the licenses included with them
+I use code from other sources in this repo, refer to the licenses included with them - The MIT license only applies to my code
 
 ## Compiling
 
