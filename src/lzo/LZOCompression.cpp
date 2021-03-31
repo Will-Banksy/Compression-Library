@@ -2,17 +2,16 @@
 #include "3rdparty/minilzo.h"
 #include <iostream>
 
-std::vector<uint8_t> LZOCompression::Compress(const std::vector<uint8_t>& data, bool* error) {
+void LZOCompression::Compress(const std::vector<uint8_t>& data, std::vector<uint8_t>& output, bool* error) {
 	if(lzo_init() != LZO_E_OK) {
 		std::cout << "[ERROR]: Initialisation of LZO library failed - This usually indicates a compiler bug" << std::endl;
 		if(error) {
 			*error = true;
 		}
-		return std::vector<uint8_t>();
+		return;
 	}
 
-	uint64_t outputSize = data.size() + data.size() / 16 + 64 + 3;
-	std::vector<uint8_t> output; // Make the output block slightly bigger than the input block, in case the data is incompressible
+	uint64_t outputSize = data.size() + data.size() / 16 + 64 + 3;// Make the output block slightly bigger than the input block, in case the data is incompressible
 	output.resize(outputSize);
 
 	uint64_t workingMemorySize = ((LZO1X_1_MEM_COMPRESS) + (sizeof(lzo_align_t) - 1)) / sizeof(lzo_align_t);
@@ -24,7 +23,7 @@ std::vector<uint8_t> LZOCompression::Compress(const std::vector<uint8_t>& data, 
 		if(error) {
 			*error = true;
 		}
-		return std::vector<uint8_t>();
+		return;
 	}
 
 	output.resize(outputSize);
@@ -32,21 +31,18 @@ std::vector<uint8_t> LZOCompression::Compress(const std::vector<uint8_t>& data, 
 	if(error) {
 		*error = false;
 	}
-
-	return output;
 }
 
-std::vector<uint8_t> LZOCompression::Decompress(const std::vector<uint8_t> data, uint32_t decompressedSize, bool* error) {
+void LZOCompression::Decompress(const std::vector<uint8_t> data, std::vector<uint8_t>& output, uint32_t decompressedSize, bool* error) {
 	if(lzo_init() != LZO_E_OK) {
 		std::cout << "[ERROR]: Initialisation of LZO library failed - This usually indicates a compiler bug" << std::endl;
 		if(error) {
 			*error = true;
 		}
-		return std::vector<uint8_t>();
+		return;
 	}
 
 	uint64_t outputSize = decompressedSize;
-	std::vector<uint8_t> output; // Make the output block slightly bigger than the input block, in case the data is incompressible
 	output.resize(outputSize);
 
 	int result = lzo1x_decompress(&data.front(), data.size(), &output.front(), &outputSize, nullptr);
@@ -55,7 +51,7 @@ std::vector<uint8_t> LZOCompression::Decompress(const std::vector<uint8_t> data,
 		if(error) {
 			*error = true;
 		}
-		return std::vector<uint8_t>();
+		return;
 	}
 
 	uint32_t outputSizeShort = (outputSize);
@@ -64,10 +60,8 @@ std::vector<uint8_t> LZOCompression::Decompress(const std::vector<uint8_t> data,
 		if(error) {
 			*error = true;
 		}
-		return std::vector<uint8_t>();
+		return;
 	}
 
 	output.resize(outputSizeShort);
-
-	return output;
 }
