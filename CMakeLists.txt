@@ -42,6 +42,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMakeDebugFlags}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMakeFlags}")
 
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "C++ Standard: ${CMAKE_CXX_STANDARD}")
 
 if("${COMPLIB_STATIC}")
 	add_library("${LibraryName}" STATIC "${SourceFiles}" "${HeaderFiles}")
